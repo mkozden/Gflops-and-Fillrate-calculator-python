@@ -20,7 +20,7 @@ while True:
     print (gbytes1 ,"GB/s")
     print (" ")
     print (" ")
-    print ("Type 1 to start again, type 2 to compare this card with another one, or type 3 to quit.")
+    print ("Type 1 to start again, type 2 to caompare this card with another one, or type 3 to quit.")
     choice = input()
     if choice == "1":
         cmd("cls")
@@ -34,7 +34,7 @@ while True:
         gpixels2 = (core2*rop2/1000)
         gtexels2 = (core2*tmp2/1000)
         gbytes2 = (mem2*2*bit2/4/1000)
-        table =[["  ","GPU1","GPU2","Difference(%)"],["GFLOPS",gflops1,gflops2,(gflops1/gflops2)*100],["Gpixel/s",gpixels1,gpixels2,(gpixels1/gpixels2)*100],["Gtexel/s",gtexels1,gtexels2,(gtexels1/gtexels2)*100],["GB/s",gbytes1,gbytes2,(gbytes1/gbytes2)*100]]
+        table =[["  ","GPU1","GPU2","Difference"],["GFLOPS",gflops1,gflops2,gflops1-gflops2],["Gpixel/s",gpixels1,gpixels2,gpixels1-gpixels2],["Gtexel/s",gtexels1,gtexels2,gtexels1-gtexels2],["GB/s",gbytes1,gbytes2,gbytes1-gbytes2]]
         print(tabulate(table))
         print(" ")
         choice
