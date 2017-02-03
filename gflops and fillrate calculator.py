@@ -34,7 +34,7 @@ while True:
         gpixels2 = (core2*rop2/1000)
         gtexels2 = (core2*tmp2/1000)
         gbytes2 = (mem2*2*bit2/4/1000)
-        table =[["  ","GPU1","GPU2","Difference(%)"],["GFLOPS",gflops1,gflops2,(gflops1-gflops2)/gflops1],["Gpixel/s",gpixels1,gpixels2,(gpixels1-gpixels2)/gpixels1],["Gtexel/s",gtexels1,gtexels2,(gtexels1-gtexels2)/gtexels1],["GB/s",gbytes1,gbytes2,(gbytes1-gbytes2)/gbytes1]]
+        table =[["  ","GPU1","GPU2","Difference(%)"],["GFLOPS",gflops1,gflops2,(gflops1-gflops2)/gflops1*100],["Gpixel/s",gpixels1,gpixels2,(gpixels1-gpixels2)/gpixels1*100],["Gtexel/s",gtexels1,gtexels2,(gtexels1-gtexels2)/gtexels1*100],["GB/s",gbytes1,gbytes2,(gbytes1-gbytes2)/gbytes1*100]]
         print(tabulate(table))
         print(" ")
         choice
