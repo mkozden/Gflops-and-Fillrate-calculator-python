@@ -1,5 +1,5 @@
 from os import system as cmd
-import os
+from os import name as osname
 from rich.console import Console
 from rich.table import Table
 
@@ -7,7 +7,7 @@ console = Console()
 
 
 def clear():
-    cmd("cls" if os.name == "nt" else "clear")
+    cmd("cls" if osname == "nt" else "clear")
 
 
 while True:
