@@ -57,11 +57,11 @@ while True:
         gtexels2 = (core2*tmp2/1000)
         if memtype2 == "ddr3" or memtype2 == "gddr3" or memtype2 == "hbm" or memtype2 == "hbm1" or memtype2 == "hbm2":
             gbytes2 = (mem2 * bit2 / 4 / 1000)
-        elif memtype1 == "gddr5":
+        elif memtype2 == "gddr5":
             gbytes2 = (mem2 * bit2 / 2 / 1000)
         elif memtype2 == "gddr5x" or memtype2 == "gddr6":
             gbytes2 = (mem2 * bit2 / 1000)
-        elif memtype1 == "gddr6x":
+        elif memtype2 == "gddr6x":
             gbytes2 = (mem2 * bit2 / 1000)
         else:
             print("invalid memory type, try again")
