@@ -35,7 +35,7 @@ class GPU:
 		elif self.mem_type == "gddr5x" or self.mem_type == "gddr6":
 			return self.mem_clk * self.bus_width / 1000
 		elif self.mem_type == "gddr6x":
-			return self.mem_clk * self.bus_width / 1000
+			return self.mem_clk * self.bus_width * 2 / 1000
 		else:
 			print("invalid memory type, try again")
 			raise TypeError
@@ -87,9 +87,9 @@ if not straight_to_exit:
 	table = Table(show_header=True, header_style="bold")
 	table.add_column("GPU")
 	table.add_column("GFLOPS")
-	table.add_column("Pixel Fillrate")
-	table.add_column("Texture Fillrate")
-	table.add_column("Bandwidth")
+	table.add_column("Pixel Fillrate (GPixel/s)")
+	table.add_column("Texture Fillrate (GTexel/s")
+	table.add_column("Bandwidth (GB/s)")
 	table.add_column("Average difference(%)", justify="center")
 	for index, gpu in enumerate(gpus):
 		if len(gpus) > 1:
