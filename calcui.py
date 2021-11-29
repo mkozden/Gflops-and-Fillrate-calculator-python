@@ -14,7 +14,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(942, 534)
+        MainWindow.resize(960, 540)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.horizontalLayout_4 = QtWidgets.QHBoxLayout(self.centralwidget)
@@ -136,7 +136,7 @@ class Ui_MainWindow(object):
         self.horizontalLayout_4.addWidget(self.MainTable)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 942, 22))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 960, 22))
         self.menubar.setObjectName("menubar")
         MainWindow.setMenuBar(self.menubar)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
@@ -148,7 +148,7 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "GPU Calculator v2"))
         self.Core.setTitle(_translate("MainWindow", "Core"))
         self.inputShader.setPlaceholderText(_translate("MainWindow", "Shader"))
         self.inputTMU.setPlaceholderText(_translate("MainWindow", "TMU"))

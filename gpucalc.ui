@@ -6,12 +6,12 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>923</width>
-    <height>534</height>
+    <width>960</width>
+    <height>540</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>GPU Calculator v2</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QHBoxLayout" name="horizontalLayout_4">
@@ -238,7 +238,7 @@ otherwise the calculation might be wrong.</string>
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>923</width>
+     <width>960</width>
      <height>22</height>
     </rect>
    </property>
