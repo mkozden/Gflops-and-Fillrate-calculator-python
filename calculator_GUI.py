@@ -1,7 +1,6 @@
 """
 TODO:
-find a way to get dynamic colors in table
-dynamically change which gpu to compare against (on click maybe?)
+Implement a database scraped from Wikipedia and/or TechPowerUp
 """
 from PyQt5 import QtWidgets
 from PyQt5.QtGui import QIntValidator
