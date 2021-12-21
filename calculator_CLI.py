@@ -27,8 +27,9 @@ class GPU:
 		return self.tmu * self.core_clk / 1000
 
 	def gbytes(self):
-		if self.mem_type == "ddr3" or self.mem_type == "gddr3" or self.mem_type == "hbm" or self.mem_type == "hbm1" or\
-				self.mem_type == "hbm2":
+		if self.mem_type == "sdr":
+			return self.mem_clk * self.bus_width / 8 / 1000
+		if self.mem_type in ["ddr", "ddr2", "gddr2", "ddr3", "gddr3", "hbm", "hbm2"]:
 			return self.mem_clk * self.bus_width / 4 / 1000
 		elif self.mem_type == "gddr5":
 			return self.mem_clk * self.bus_width / 2 / 1000
@@ -37,8 +38,7 @@ class GPU:
 		elif self.mem_type == "gddr6x":
 			return self.mem_clk * self.bus_width * 2 / 1000
 		else:
-			print("invalid memory type, try again")
-			raise TypeError
+			raise TypeError(f"Memory type {self.mem_type} not recognized")
 
 
 def clrdff(a, b):

@@ -1,23 +1,26 @@
 """
 TODO:
-Implement a database scraped from Wikipedia and/or TechPowerUp
+
 """
 from PyQt5 import QtWidgets
 from PyQt5.QtGui import QIntValidator
 import sys
 from calcui import Ui_MainWindow
 from calculator_CLI import GPU
-
+import json
 
 class Window(QtWidgets.QMainWindow):
 	def __init__(self):
 		super(Window, self).__init__()
 		self.ui = Ui_MainWindow()
 		self.ui.setupUi(self)
+		self.dbgpus = []
 		self.gpus = []
-		self.ui.AddGPU.clicked.connect(self.add_gpu)
+		self.load_all_gpus("gpu_data.json")
+		self.ui.AddCustomGPU.clicked.connect(self.add_custom_gpu)
 		self.ui.RemoveGPU.clicked.connect(self.remove_gpu)
 		self.ui.MainTable.cellPressed.connect(self.update_gpus)
+		self.ui.AddExistingGPU.clicked.connect(self.load_from_database)
 		self.ui.chooseMemType.addItems(["GDDR3", "GDDR5", "GDDR5X", "GDDR6", "GDDR6X", "HBM", "HBM2"])
 		self.ui.MainTable.setHorizontalHeaderLabels(["Specs", "GFLOPS", "Pixel Fillrate (GPixel/s)", "Texture Fillrate (GTexel/s)", "Bandwidth (GB/s)", "Average Difference (%)"])
 		self.ui.MainTable.horizontalHeader().setSectionResizeMode(QtWidgets.QHeaderView.ResizeToContents)
@@ -27,7 +30,28 @@ class Window(QtWidgets.QMainWindow):
 			item.setValidator(QIntValidator())
 			item.textChanged.connect(self.reset_color)
 
-	def compare_gpus(self, compared, reference, value):
+	def load_all_gpus(self, filename):
+		self.dbgpus = json.load(open(filename, "r"))
+		for item in self.dbgpus:
+			self.ui.GPUList.addItem(item["name"])
+
+	def load_from_database(self):
+		if self.ui.GPUList.currentText() != "":
+			for item in self.dbgpus:
+				if item["name"] == self.ui.GPUList.currentText():
+					gpu = GPU(":".join([str(i) for i in item["cfg"]]), item["coreclk"], item["memtype"].lower().lstrip(" "), item["buswidth"], item["memclk"])
+					self.gpus.append(gpu)
+					self.ui.MainTable.setRowCount(self.ui.MainTable.rowCount() + 1)
+					self.ui.MainTable.setItem(self.ui.MainTable.rowCount() - 1, 0, QtWidgets.QTableWidgetItem(
+						f"{gpu.core_cfg}\n{gpu.core_clk} MHz Core\n{gpu.mem_clk} MHz Memory\n{gpu.mem_type.upper()}"))
+					self.ui.MainTable.setItem(self.ui.MainTable.rowCount() - 1, 1, QtWidgets.QTableWidgetItem(str(gpu.gflops())))
+					self.ui.MainTable.setItem(self.ui.MainTable.rowCount() - 1, 2, QtWidgets.QTableWidgetItem(str(gpu.gpixels())))
+					self.ui.MainTable.setItem(self.ui.MainTable.rowCount() - 1, 3, QtWidgets.QTableWidgetItem(str(gpu.gtexels())))
+					self.ui.MainTable.setItem(self.ui.MainTable.rowCount() - 1, 4, QtWidgets.QTableWidgetItem(str(gpu.gbytes())))
+					#TODO: abstract the add gpu function
+
+	@staticmethod
+	def compare_gpus(compared, reference, value):
 		"""
 
 		:param compared: GPU to be compared
@@ -61,7 +85,7 @@ class Window(QtWidgets.QMainWindow):
 			return 0
 		return 0
 
-	def add_gpu(self):
+	def add_custom_gpu(self):
 		if self.check_inputs() == 0:
 			gpu = GPU(":".join([i.text() for i in self.ui.Core.findChildren(QtWidgets.QLineEdit)]),
 			          self.ui.inputCoreHz.text(), self.ui.chooseMemType.currentText().lower(), self.ui.inputBusWidth.text(),
