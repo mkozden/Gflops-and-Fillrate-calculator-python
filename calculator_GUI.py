@@ -1,13 +1,11 @@
-"""
-TODO:
-
-"""
 from PyQt5 import QtWidgets
 from PyQt5.QtGui import QIntValidator
+from PyQt5.QtCore import Qt
 import sys
 from calcui import Ui_MainWindow
 from calculator_CLI import GPU
 import json
+
 
 class Window(QtWidgets.QMainWindow):
 	def __init__(self):
@@ -16,6 +14,7 @@ class Window(QtWidgets.QMainWindow):
 		self.ui.setupUi(self)
 		self.dbgpus = []
 		self.gpus = []
+		self.dbgpu_namelist = []
 		self.load_all_gpus("gpu_data.json")
 		self.ui.AddCustomGPU.clicked.connect(self.add_custom_gpu)
 		self.ui.RemoveGPU.clicked.connect(self.remove_gpu)
@@ -34,21 +33,29 @@ class Window(QtWidgets.QMainWindow):
 		self.dbgpus = json.load(open(filename, "r"))
 		for item in self.dbgpus:
 			self.ui.GPUList.addItem(item["name"])
+			self.dbgpu_namelist.append(item["name"])
+		self.completer = QtWidgets.QCompleter(self.dbgpu_namelist)
+		self.completer.setCaseSensitivity(False)
+		self.completer.setFilterMode(Qt.MatchContains)
+		self.ui.GPUList.setCompleter(self.completer)
+
+	def add_gpu(self, cfg, coreclk, memtype, buswidth, memclk):
+		gpu = GPU(":".join([i.text() if isinstance(i, QtWidgets.QLineEdit) else str(i) for i in cfg]), coreclk,
+		          memtype.lower().lstrip(" "), buswidth, memclk)
+		self.gpus.append(gpu)
+		self.ui.MainTable.setRowCount(self.ui.MainTable.rowCount() + 1)
+		self.ui.MainTable.setItem(self.ui.MainTable.rowCount() - 1, 0, QtWidgets.QTableWidgetItem(
+			f"{gpu.core_cfg}\n{gpu.core_clk} MHz Core\n{gpu.mem_clk} MHz Memory\n{gpu.mem_type.upper()}, {gpu.bus_width}-bit"))
+		self.ui.MainTable.setItem(self.ui.MainTable.rowCount() - 1, 1, QtWidgets.QTableWidgetItem(str(gpu.gflops())))
+		self.ui.MainTable.setItem(self.ui.MainTable.rowCount() - 1, 2, QtWidgets.QTableWidgetItem(str(gpu.gpixels())))
+		self.ui.MainTable.setItem(self.ui.MainTable.rowCount() - 1, 3, QtWidgets.QTableWidgetItem(str(gpu.gtexels())))
+		self.ui.MainTable.setItem(self.ui.MainTable.rowCount() - 1, 4, QtWidgets.QTableWidgetItem(str(gpu.gbytes())))
 
 	def load_from_database(self):
 		if self.ui.GPUList.currentText() != "":
 			for item in self.dbgpus:
 				if item["name"] == self.ui.GPUList.currentText():
-					gpu = GPU(":".join([str(i) for i in item["cfg"]]), item["coreclk"], item["memtype"].lower().lstrip(" "), item["buswidth"], item["memclk"])
-					self.gpus.append(gpu)
-					self.ui.MainTable.setRowCount(self.ui.MainTable.rowCount() + 1)
-					self.ui.MainTable.setItem(self.ui.MainTable.rowCount() - 1, 0, QtWidgets.QTableWidgetItem(
-						f"{gpu.core_cfg}\n{gpu.core_clk} MHz Core\n{gpu.mem_clk} MHz Memory\n{gpu.mem_type.upper()}"))
-					self.ui.MainTable.setItem(self.ui.MainTable.rowCount() - 1, 1, QtWidgets.QTableWidgetItem(str(gpu.gflops())))
-					self.ui.MainTable.setItem(self.ui.MainTable.rowCount() - 1, 2, QtWidgets.QTableWidgetItem(str(gpu.gpixels())))
-					self.ui.MainTable.setItem(self.ui.MainTable.rowCount() - 1, 3, QtWidgets.QTableWidgetItem(str(gpu.gtexels())))
-					self.ui.MainTable.setItem(self.ui.MainTable.rowCount() - 1, 4, QtWidgets.QTableWidgetItem(str(gpu.gbytes())))
-					#TODO: abstract the add gpu function
+					self.add_gpu(item["cfg"], item["coreclk"], item["memtype"].lower().lstrip(" "), item["buswidth"], item["memclk"])
 
 	@staticmethod
 	def compare_gpus(compared, reference, value):
@@ -87,23 +94,16 @@ class Window(QtWidgets.QMainWindow):
 
 	def add_custom_gpu(self):
 		if self.check_inputs() == 0:
-			gpu = GPU(":".join([i.text() for i in self.ui.Core.findChildren(QtWidgets.QLineEdit)]),
-			          self.ui.inputCoreHz.text(), self.ui.chooseMemType.currentText().lower(), self.ui.inputBusWidth.text(),
-			          self.ui.inputMemHz.text())
-			self.gpus.append(gpu)
-			self.ui.MainTable.setRowCount(self.ui.MainTable.rowCount()+1)
-			self.ui.MainTable.setItem(self.ui.MainTable.rowCount()-1, 0, QtWidgets.QTableWidgetItem(f"{gpu.core_cfg}\n{gpu.core_clk} MHz Core\n{gpu.mem_clk} MHz Memory\n{gpu.mem_type.upper()}"))
-			self.ui.MainTable.setItem(self.ui.MainTable.rowCount()-1, 1, QtWidgets.QTableWidgetItem(str(gpu.gflops())))
-			self.ui.MainTable.setItem(self.ui.MainTable.rowCount()-1, 2, QtWidgets.QTableWidgetItem(str(gpu.gpixels())))
-			self.ui.MainTable.setItem(self.ui.MainTable.rowCount()-1, 3, QtWidgets.QTableWidgetItem(str(gpu.gtexels())))
-			self.ui.MainTable.setItem(self.ui.MainTable.rowCount()-1, 4, QtWidgets.QTableWidgetItem(str(gpu.gbytes())))
+			self.add_gpu(self.ui.Core.findChildren(QtWidgets.QLineEdit), self.ui.inputCoreHz.text(),
+			             self.ui.chooseMemType.currentText().lower(), self.ui.inputBusWidth.text(),
+			             self.ui.inputMemHz.text())
 			for item in self.ui.verticalWidget.findChildren(QtWidgets.QLineEdit):
 				item.setText("")
 
 	def update_gpus(self):
 		reference_row = self.ui.MainTable.currentRow()
 		for row in range(self.ui.MainTable.rowCount()):
-			self.ui.MainTable.setItem(row, 0, QtWidgets.QTableWidgetItem(f"{self.gpus[row].core_cfg}\n{self.gpus[row].core_clk} MHz Core\n{self.gpus[row].mem_clk} MHz Memory\n{self.gpus[row].mem_type.upper()}"))
+			self.ui.MainTable.setItem(row, 0, QtWidgets.QTableWidgetItem(f"{self.gpus[row].core_cfg}\n{self.gpus[row].core_clk} MHz Core\n{self.gpus[row].mem_clk} MHz Memory\n{self.gpus[row].mem_type.upper()}, {self.gpus[row].bus_width}-bit"))
 			self.ui.MainTable.setCellWidget(row, 1, self.compare_gpus(self.gpus[row], self.gpus[reference_row], "gflops"))
 			self.ui.MainTable.setCellWidget(row, 2, self.compare_gpus(self.gpus[row], self.gpus[reference_row], "gpixels"))
 			self.ui.MainTable.setCellWidget(row, 3, self.compare_gpus(self.gpus[row], self.gpus[reference_row], "gtexels"))
@@ -127,7 +127,6 @@ class Window(QtWidgets.QMainWindow):
 		print(row)
 		self.ui.MainTable.removeRow(row)
 		del self.gpus[row]
-
 
 
 def window():

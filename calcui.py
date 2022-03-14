@@ -35,6 +35,7 @@ class Ui_MainWindow(object):
         self.verticalLayout_7 = QtWidgets.QVBoxLayout(self.fromdatabase)
         self.verticalLayout_7.setObjectName("verticalLayout_7")
         self.GPUList = QtWidgets.QComboBox(self.fromdatabase)
+        self.GPUList.setEditable(True)
         self.GPUList.setObjectName("GPUList")
         self.verticalLayout_7.addWidget(self.GPUList)
         self.AddExistingGPU = QtWidgets.QPushButton(self.fromdatabase)

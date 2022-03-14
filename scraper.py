@@ -3,10 +3,12 @@ from selenium import webdriver
 import time
 import os
 
+
 class Scraper:
 	def __init__(self):
 		self.browser = webdriver.Chrome()
 		self.check_file()
+
 	def get_gpus(self):
 		self.browser.get("https://www.techpowerup.com/gpu-specs/")
 		searchbox = self.browser.find_element_by_id("quicksearch")
@@ -78,4 +80,3 @@ class Scraper:
 
 
 scp = Scraper()
-
