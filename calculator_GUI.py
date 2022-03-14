@@ -112,7 +112,7 @@ class Window(QtWidgets.QMainWindow):
 
 	def check_inputs(self):
 		has_error = 0
-		for item in self.ui.verticalWidget.findChildren(QtWidgets.QLineEdit):
+		for item in self.ui.customgpu.findChildren(QtWidgets.QLineEdit):
 			if item.text() == "":
 				item.setStyleSheet("QLineEdit { background-color: rgb(255,192,192);}")
 				has_error = 1
