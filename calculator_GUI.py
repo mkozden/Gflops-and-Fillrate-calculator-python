@@ -56,7 +56,7 @@ class Window(QtWidgets.QMainWindow):
 			for item in self.dbgpus:
 				if item["name"] == self.ui.GPUList.currentText():
 					self.add_gpu(item["cfg"], item["coreclk"], item["memtype"].lower().lstrip(" "), item["buswidth"], item["memclk"])
-
+			self.ui.GPUList.clearEditText()
 	@staticmethod
 	def compare_gpus(compared, reference, value):
 		"""
@@ -72,10 +72,10 @@ class Window(QtWidgets.QMainWindow):
 					diff = 0
 					methods = [func for func in dir(GPU) if callable(getattr(GPU, func)) and not func.startswith("__")]
 					for method in methods:
-						diff += ((getattr(compared, method)() - getattr(reference, method)())/getattr(reference, method)())*100
-					diff = diff/len(methods)
+						diff += ((getattr(compared, method)() - getattr(reference, method)())/getattr(reference, method)()) * 100
+					diff = diff / len(methods)
 				else:
-					diff = ((getattr(compared, value)() - getattr(reference, value)())/getattr(reference, value)())*100
+					diff = ((getattr(compared, value)() - getattr(reference, value)()) / getattr(reference, value)()) * 100
 				if diff < 0:
 					color = "red"
 				elif diff > 0:
