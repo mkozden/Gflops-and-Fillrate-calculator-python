@@ -20,7 +20,8 @@ class Window(QtWidgets.QMainWindow):
 		self.ui.RemoveGPU.clicked.connect(self.remove_gpu)
 		self.ui.MainTable.cellPressed.connect(self.update_gpus)
 		self.ui.AddExistingGPU.clicked.connect(self.load_from_database)
-		self.ui.chooseMemType.addItems(["GDDR3", "GDDR5", "GDDR5X", "GDDR6", "GDDR6X", "HBM", "HBM2"])
+		self.ui.populateFields.clicked.connect(self.modify_existing_gpu)
+		self.ui.chooseMemType.addItems(["SDR", "DDR", "GDDR2", "DDR3", "GDDR3", "GDDR5", "GDDR5X", "GDDR6", "GDDR6X", "HBM", "HBM2"])
 		self.ui.MainTable.setHorizontalHeaderLabels(["Specs", "GFLOPS", "Pixel Fillrate (GPixel/s)", "Texture Fillrate (GTexel/s)", "Bandwidth (GB/s)", "Average Difference (%)"])
 		self.ui.MainTable.horizontalHeader().setSectionResizeMode(QtWidgets.QHeaderView.ResizeToContents)
 		self.ui.MainTable.verticalHeader().setSectionResizeMode(QtWidgets.QHeaderView.ResizeToContents)
@@ -57,6 +58,18 @@ class Window(QtWidgets.QMainWindow):
 				if item["name"] == self.ui.GPUList.currentText():
 					self.add_gpu(item["cfg"], item["coreclk"], item["memtype"].lower().lstrip(" "), item["buswidth"], item["memclk"])
 			self.ui.GPUList.clearEditText()
+
+	def modify_existing_gpu(self):
+				if self.ui.GPUList.currentText() != "":
+					for item in self.dbgpus:
+						if item["name"] == self.ui.GPUList.currentText():
+							for i, box in enumerate(self.ui.Core.findChildren(QtWidgets.QLineEdit)):
+								box.setText(str(item["cfg"][i]))
+							self.ui.inputBusWidth.setText(str(item["buswidth"]))
+							self.ui.chooseMemType.setCurrentText(item["memtype"].upper().lstrip(" "))
+							self.ui.inputCoreHz.setText(item["coreclk"])
+							self.ui.inputMemHz.setText(item["memclk"])
+					self.ui.GPUList.clearEditText()
 	@staticmethod
 	def compare_gpus(compared, reference, value):
 		"""

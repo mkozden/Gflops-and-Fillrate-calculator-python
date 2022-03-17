@@ -11,7 +11,10 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>GPU Calculator v3</string>
+   <string>GPU Calculator v3.5</string>
+  </property>
+  <property name="windowOpacity">
+   <double>1.000000000000000</double>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QHBoxLayout" name="horizontalLayout_4">
@@ -48,8 +51,21 @@
           </item>
           <item>
            <widget class="QPushButton" name="AddExistingGPU">
+            <property name="toolTip">
+             <string>Adds the GPU directly to comparison.</string>
+            </property>
             <property name="text">
              <string>Add Existing GPU</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="populateFields">
+            <property name="toolTip">
+             <string>Fills the Custom GPU fields with the specs of the chosen GPU.</string>
+            </property>
+            <property name="text">
+             <string>Modify Before Adding</string>
             </property>
            </widget>
           </item>

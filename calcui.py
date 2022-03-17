@@ -15,6 +15,7 @@ class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(960, 540)
+        MainWindow.setWindowOpacity(1.0)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.horizontalLayout_4 = QtWidgets.QHBoxLayout(self.centralwidget)
@@ -41,6 +42,9 @@ class Ui_MainWindow(object):
         self.AddExistingGPU = QtWidgets.QPushButton(self.fromdatabase)
         self.AddExistingGPU.setObjectName("AddExistingGPU")
         self.verticalLayout_7.addWidget(self.AddExistingGPU)
+        self.populateFields = QtWidgets.QPushButton(self.fromdatabase)
+        self.populateFields.setObjectName("populateFields")
+        self.verticalLayout_7.addWidget(self.populateFields)
         self.verticalLayout.addWidget(self.fromdatabase)
         self.customgpu = QtWidgets.QGroupBox(self.verticalWidget)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Expanding)
@@ -166,9 +170,12 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "GPU Calculator v3"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "GPU Calculator v3.5"))
         self.fromdatabase.setTitle(_translate("MainWindow", "1. Select Existing GPU"))
+        self.AddExistingGPU.setToolTip(_translate("MainWindow", "Adds the GPU directly to comparison."))
         self.AddExistingGPU.setText(_translate("MainWindow", "Add Existing GPU"))
+        self.populateFields.setToolTip(_translate("MainWindow", "Fills the Custom GPU fields with the specs of the chosen GPU."))
+        self.populateFields.setText(_translate("MainWindow", "Modify Before Adding"))
         self.customgpu.setTitle(_translate("MainWindow", "2. Custom GPU"))
         self.Core.setTitle(_translate("MainWindow", "Core"))
         self.inputShader.setPlaceholderText(_translate("MainWindow", "Shader"))
