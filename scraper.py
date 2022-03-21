@@ -14,7 +14,7 @@ class Scraper:
 		searchbox = self.browser.find_element_by_id("quicksearch")
 		searchbox.send_keys(" ")
 		time.sleep(8)
-		table = self.browser.find_element_by_xpath("/html/body/div/span[2]/article/div[2]/table/tbody")
+		table = self.browser.find_element_by_css_selector("#ajaxresults > table > tbody")
 		items = table.find_elements_by_tag_name("tr")
 		items_final = []
 		i = 0
@@ -32,7 +32,7 @@ class Scraper:
 			memclk = props[6].text.split()[0]
 			corecfg = props[7].text.split("/")
 			if len(corecfg) == 4:
-				corecfg = [int(corecfg[0])+int(corecfg[1]), int(corecfg[2]), int(corecfg[3])]
+				corecfg = [int(corecfg[0]) + int(corecfg[1]), int(corecfg[2]), int(corecfg[3])]
 			elif len(corecfg) == 3:
 				corecfg = [int(corecfg[0]), int(corecfg[1]), int(corecfg[2])]
 			else:
@@ -60,7 +60,7 @@ class Scraper:
 		def dictnonecheck(dictionary):
 			for key, value in dictionary.items():
 				if key == "memtype":
-					if value is None or value.lower().lstrip(" ") not in ["sdr", "ddr", "ddr2", "gddr2", "ddr3", "gddr3", "gddr5", "gddr5x", "gddr6", "gddr6x", "hbm", "hbm2"]:
+					if value is None or value.lower().lstrip(" ") not in ["sdr", "ddr", "ddr2", "gddr2", "ddr3", "gddr3", "gddr5", "lpddr5", "gddr5x", "gddr6", "gddr6x", "hbm", "hbm2"]:
 						return False
 					else:
 						return True
@@ -72,6 +72,7 @@ class Scraper:
 				added.append(item["name"])
 				cleaned.append(item)
 		self.save_json(cleaned)
+		print(f"Saved {len(cleaned)} gpus to file")
 
 	@staticmethod
 	def save_json(itemlist, filename="gpu_data.json"):

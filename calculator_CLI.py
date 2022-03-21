@@ -31,9 +31,9 @@ class GPU:
 			return self.mem_clk * self.bus_width / 8 / 1000
 		if self.mem_type in ["ddr", "ddr2", "gddr2", "ddr3", "gddr3", "hbm", "hbm2"]:
 			return self.mem_clk * self.bus_width / 4 / 1000
-		elif self.mem_type == "gddr5":
+		elif self.mem_type in ["gddr5","lpddr5"]:
 			return self.mem_clk * self.bus_width / 2 / 1000
-		elif self.mem_type == "gddr5x" or self.mem_type == "gddr6":
+		elif self.mem_type in ["gddr5x","gddr6"]:
 			return self.mem_clk * self.bus_width / 1000
 		elif self.mem_type == "gddr6x":
 			return self.mem_clk * self.bus_width * 2 / 1000

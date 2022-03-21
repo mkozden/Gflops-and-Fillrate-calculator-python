@@ -21,7 +21,7 @@ class Window(QtWidgets.QMainWindow):
 		self.ui.MainTable.cellPressed.connect(self.update_gpus)
 		self.ui.AddExistingGPU.clicked.connect(self.load_from_database)
 		self.ui.populateFields.clicked.connect(self.modify_existing_gpu)
-		self.ui.chooseMemType.addItems(["SDR", "DDR", "GDDR2", "DDR3", "GDDR3", "GDDR5", "GDDR5X", "GDDR6", "GDDR6X", "HBM", "HBM2"])
+		self.ui.chooseMemType.addItems(["SDR", "DDR", "GDDR2", "DDR3", "GDDR3", "GDDR5", "LPDDR5", "GDDR5X", "GDDR6", "GDDR6X", "HBM", "HBM2"])
 		self.ui.MainTable.setHorizontalHeaderLabels(["Specs", "GFLOPS", "Pixel Fillrate (GPixel/s)", "Texture Fillrate (GTexel/s)", "Bandwidth (GB/s)", "Average Difference (%)"])
 		self.ui.MainTable.horizontalHeader().setSectionResizeMode(QtWidgets.QHeaderView.ResizeToContents)
 		self.ui.MainTable.verticalHeader().setSectionResizeMode(QtWidgets.QHeaderView.ResizeToContents)
